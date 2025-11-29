@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../features/productSlice";
 import { Heart, } from "lucide-react";
+import { toast } from "react-toastify";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -9,6 +10,7 @@ export default function Home() {
   const { items, status } = useSelector((state) => state.products);
   const [selectedProduct, setselectedProduct] = useState(null)
   const [sideBar, setSideBar] = useState(false)
+  const [addToCart , setAddToCart] = useState("")
 
 
   useEffect(() => {
@@ -17,7 +19,7 @@ export default function Home() {
 
   const [like, setLike] = useState("")
 
-  
+
 
   if (status === "loading") {
   return <div className="p-10 text-xl font-bold">Loading products...</div>;
@@ -25,6 +27,10 @@ export default function Home() {
 
 if (status === "failed") {
   return <div className="p-10 text-red-500">Failed to load products</div>;
+}
+
+const handleClick = ()=>{
+  toast.success("Added To Cart")
 }
 
 
@@ -79,7 +85,9 @@ if (status === "failed") {
               ₹{selectedProduct.price}
             </p>
 
-            <p className="mt-4 text-sm">{selectedProduct.description}</p>
+            <p className="mt-4 text-sm">{selectedProduct.description}</p><br />
+
+            <button onClick={handleClick} className="bg-yellow-300 px-4 py-1 rounded">Add To Cart</button><br />
 
             <button
               onClick={() => setSideBar(false)}

@@ -5,11 +5,16 @@ import Cart from './pages/Cart'
 import Favorite from './pages/Favorite'
 import Login from './pages/Login'
 import { Route,Routes } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
+import "react-toastify/dist/ReactToastify.css";
+
 
 function App() {
   return (
     <div>
         <Header />
+        <ToastContainer 
+        position='top-center'/>
       <div className='mt-16'>
         <Routes>
             <Route path='/' element={<Home />}/>

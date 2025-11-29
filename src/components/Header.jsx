@@ -34,7 +34,7 @@ export default function Header() {
             <div
               className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm" 
               onClick={() => setCart(false)}
-            ></div>
+            > </div>
           )}
 
           {/* Sliding Panel */}
