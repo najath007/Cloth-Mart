@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Menu, X, ShoppingCart, Heart,User,Search} from 'lucide-react'
-import api from '../api/axiosInstance'
+import { Menu, X, ShoppingCart, Heart,User,Search, Filter} from 'lucide-react'
 
 export default function Header() {
   const [cart, setCart] = useState(false)
@@ -23,6 +22,7 @@ export default function Header() {
             placeholder="abcd"
           />
           <button className="ml-2 px-3 py-1 border rounded"><Search/></button>
+          <button className=''><Filter /></button>
         </div>
 
         {/* Desktop Icons */}
