@@ -10,7 +10,7 @@ function App() {
   return (
     <div>
         <Header />
-      <div className='mt-28'>
+      <div className='mt-16'>
         <Routes>
             <Route path='/' element={<Home />}/>
             <Route path='/cart' element={<Cart/>}/>

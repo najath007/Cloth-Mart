@@ -10,15 +10,6 @@ export const fetchProducts = createAsyncThunk(
   }
 );
 
-//  Fetch Products by Category
-export const fetchProductsByCategory = createAsyncThunk(
-  "products/fetchByCategory",
-  async (category) => {
-    const res = await api.get(`/products/category/${category}`);
-    return res.data;
-  }
-);
-
 const productsSlice = createSlice({
   name: "products",
   initialState: {

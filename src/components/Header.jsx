@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Menu, X } from 'lucide-react' 
+import { Menu, X, ShoppingCart, Heart,User,Search} from 'lucide-react'
+import api from '../api/axiosInstance'
 
 export default function Header() {
-  const [open, setOpen] = useState(false)
+  const [cart, setCart] = useState(false)
 
   return (
     <div className="fixed top-0 left-0 w-full bg-white z-50">
@@ -11,7 +12,7 @@ export default function Header() {
 
         {/* Logo */}
         <Link to="/" className="flex items-center">
-          <img className="w-24" src="logo.png" alt="logo" />
+          <img className="w-12" src="logo.png" alt="logo" />
         </Link>
 
         {/* Desktop Search Bar */}
@@ -21,14 +22,42 @@ export default function Header() {
             type="text"
             placeholder="abcd"
           />
-          <button className="ml-2 px-3 py-1 border rounded">press</button>
+          <button className="ml-2 px-3 py-1 border rounded"><Search/></button>
         </div>
 
         {/* Desktop Icons */}
-        <div className="hidden md:flex items-center gap-3  text-xl">
-          <Link to="/cart">🛒</Link>
-          <Link to="/favorite">❤️</Link>
-          <Link to="/login">👤</Link>
+        <div className="hidden md:flex items-center gap-10 text-xl">
+
+          {/* Cart Button */}
+          <button onClick={() => setCart(true)}><ShoppingCart/></button>
+          {cart && (
+            <div
+              className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm" 
+              onClick={() => setCart(false)}
+            ></div>
+          )}
+
+          {/* Sliding Panel */}
+          <div
+            className={`fixed top-0 right-0 h-full w-1/2 bg-white shadow-xl p-6 transition-transform duration-300 ${
+              cart ? "translate-x-0" : "translate-x-full"
+            }`}
+          >
+            <h2 className="text-xl font-bold mb-4">CART</h2>
+             
+
+            
+
+            <button
+              onClick={() => setCart(false)}
+              className="px-4 py-2 bg-red-500 text-white rounded"
+            >
+              Close
+            </button>
+          </div>
+
+          <Link to="/favorite"><Heart/></Link>
+          <Link to="/login"><User/></Link>
         </div>
       </div>
     </div>
