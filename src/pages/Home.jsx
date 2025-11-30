@@ -1,36 +1,49 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../features/productSlice";
-import { Heart, ShoppingCart } from "lucide-react";
-import { toast } from "react-toastify";
+import { Heart, Link, ShoppingCart } from "lucide-react";
 
+  
 export default function Home() {
   const dispatch = useDispatch();
 
+  // ⬇️ Get products & loading status from Redux store
   const { items, status } = useSelector((state) => state.products);
 
-  const [selectedProduct, setselectedProduct] = useState(null);
-  const [sideBar, setSideBar] = useState(false);
+
+  // ⬇️ State for liked items (stores ids)
   const [like, setLike] = useState([]);
-  const [addToCart, setAddToCart]= useState([]);
+
+  // ⬇️ State for cart items (stores ids)
+  const [addToCart, setAddToCart] = useState([]);
 
  
+  // ⬇️ Fetch products first time when page loads
   useEffect(() => {
     dispatch(fetchProducts());
   }, []);
 
-  const handlecart=(id,e)=>{
-    e.stopPropagation();
-    if(addToCart.includes(id)){
-      setAddToCart(addToCart.filter((item) => item !==id))
-    }else{
-      setAddToCart([...addToCart,id])
-    }
-  }
+  // -----------------------
+  // ADD / REMOVE FROM CART
+  // -----------------------
+  const handlecart = (id, e) => {
+    e.stopPropagation(); // prevent opening sidebar
 
-// like button
+    if (addToCart.includes(id)) {
+      // remove item from cart
+      setAddToCart(addToCart.filter((item) => item !== id));
+    } else {
+      // add item to cart
+      setAddToCart([...addToCart, id]);
+    }
+  };
+
+  // -----------------------
+  // ADD / REMOVE LIKE
+  // -----------------------
   const handlelike = (id, e) => {
-    e.stopPropagation();
+    e.stopPropagation(); // prevent opening sidebar
+
     if (like.includes(id)) {
       setLike(like.filter((item) => item !== id));
     } else {
@@ -38,12 +51,9 @@ export default function Home() {
     }
   };
 
-
-  const handleClick = () => {
-    toast.success("Added To Cart");
-  };
-
-
+  // -----------------------
+  // LOADING & ERROR UI
+  // -----------------------
   if (status === "loading") {
     return <div className="p-10 text-xl font-bold">Loading products...</div>;
   }
@@ -52,102 +62,52 @@ export default function Home() {
     return <div className="p-10 text-red-500">Failed to load products</div>;
   }
 
-
+  // -----------------------
+  // MAIN UI
+  // -----------------------
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 p-10">
 
-  
+      {/* -------------------------
+           PRODUCT GRID LIST
+      -------------------------- */}
       {items.map((item) => (
-        <div
-          key={item.id}
-          className="shadow p-4 rounded-md relative hover:shadow-md"
-          onClick={() => {
-            setselectedProduct(item);
-            setSideBar(true);
-          }}>
-         
-          <button
-            className="absolute top-3 right-3"
-            onClick={(e) => handlelike(item.id, e)}>
-            {like.includes(item.id) ? <Heart fill="red" /> : <Heart />}
-          </button>
+        <div key={item.id}className="shadow p-4 rounded-md relative hover:shadow-md"onClick={() => <Link to={'/product'}>{item.id} </Link>} >
 
-          
+          {/* ❤️ LIKE BUTTON */}
+          <button className="absolute top-3 right-3"onClick={(e) => handlelike(item.id, e)}>{
+            like.includes(item.id) ? (<Heart fill="red" />) : (<Heart />)}</button>
+
+          {/* 🖼 PRODUCT IMAGE */}
           <img src={item.image} alt="" className="h-40 mx-auto" />
 
-          
+          {/* 📝 PRODUCT TITLE */}
           <h2
             className="text-lg font-semibold mt-3 truncate"
-            title={item.title}>
+            title={item.title}
+          >
             {item.title}
           </h2>
 
-         
+          {/* CATEGORY */}
           <p className="text-gray-600 text-sm mt-2">
             Category : {item.category}
           </p>
 
-          
+          {/* PRICE + CART BUTTON */}
           <div className="flex justify-between items-center mt-2">
             <p className="font-bold bg-yellow-400 w-fit px-2 py-1 rounded">
               ₹{item.price}
             </p>
 
-            <button onClick={(e) => {handlecart(item.id,e); handleClick()}}>{addToCart.includes(item.id) ? <ShoppingCart fill="red"/> : <ShoppingCart /> }</button>
+            {/* 🛒 CART BUTTON */}
+            <button onClick={(e) => {handlecart(item.id, e); // add/remove cart
+                handlecart();          // toast message
+              }}>
+            {addToCart.includes(item.id) ? (<ShoppingCart fill="red" />) : (<ShoppingCart />)}</button>
           </div>
         </div>
       ))}
-
-    
-      {sideBar && (
-        <div
-          className="fixed inset-0 backdrop-blur-sm"
-          onClick={() => setSideBar(false)}
-        ></div>
-      )}
-
-      
-      <div
-        className={`fixed top-0 right-0 h-full w-1/2 bg-white shadow-xl p-6 transition-transform duration-300 
-        ${sideBar ? "translate-x-0" : "translate-x-full"}`}
-      >
-        
-        {selectedProduct && (
-          <>
-            <img
-              src={selectedProduct.image}
-              className="h-40 mx-auto mt-24"/>
-
-            <h2 className="mt-4 text-lg font-bold">
-              {selectedProduct.title}
-            </h2>
-
-            <p className="text-gray-600 mt-2">
-              {selectedProduct.category}
-            </p>
-
-            <p className="text-xl font-semibold mt-3">
-              ₹{selectedProduct.price}
-            </p>
-
-            <p className="mt-4 text-sm">{selectedProduct.description}</p>
-          <div className="flex justify-between">
-             <button
-              onClick={handleClick}
-              className="bg-yellow-300 px-4 py-1 rounded mt-4">
-              Add To Cart
-            </button>
-
-            <button
-              onClick={() => setSideBar(false)}
-              className="mt-6 px-4 py-2 bg-red-500 text-white rounded">
-              Close
-            </button>
-          </div>
-           
-          </>
-        )}
-      </div>
 
     </div>
   );

@@ -4,6 +4,7 @@ import Home from './pages/Home'
 import Cart from './pages/Cart'
 import Favorite from './pages/Favorite'
 import Login from './pages/Login'
+import SingleProduct from './components/SingleProduct'
 import { Route,Routes } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import "react-toastify/dist/ReactToastify.css";
@@ -21,6 +22,7 @@ function App() {
             <Route path='/cart' element={<Cart/>}/>
             <Route path='/favorite' element={<Favorite />}/>
             <Route path='/login' element={<Login/>}/>
+            <Route path='/product' element={<SingleProduct />}/>
         </Routes>
       </div>
 
