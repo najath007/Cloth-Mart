@@ -10,6 +10,7 @@ import { ToastContainer } from 'react-toastify'
 import "react-toastify/dist/ReactToastify.css";
 
 
+
 function App() {
   return (
     <div>
@@ -22,7 +23,8 @@ function App() {
             <Route path='/cart' element={<Cart/>}/>
             <Route path='/favorite' element={<Favorite />}/>
             <Route path='/login' element={<Login/>}/>
-            <Route path='/product' element={<SingleProduct />}/>
+            <Route path='/product/:id'element={<SingleProduct />}/>
+            <Route path="/cart" element={<Cart />} />
         </Routes>
       </div>
 
