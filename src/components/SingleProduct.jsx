@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
 import { useEffect } from "react"
-import { fetchProducts } from "../features/productSlice"
+// import { fetchProducts } from "../features/productSlice"
 
 export default function SingleProduct() {
 

@@ -1,7 +1,6 @@
 import './App.css'
 import Header from './components/Header'
 import Home from './pages/Home'
-import Cart from './pages/Cart'
 import Favorite from './pages/Favorite'
 import Login from './pages/Login'
 import SingleProduct from './components/SingleProduct'
@@ -20,11 +19,9 @@ function App() {
       <div className='mt-16'>
         <Routes>
             <Route path='/' element={<Home />}/>
-            <Route path='/cart' element={<Cart/>}/>
             <Route path='/favorite' element={<Favorite />}/>
             <Route path='/login' element={<Login/>}/>
             <Route path='/product/:id'element={<SingleProduct />}/>
-            <Route path="/cart" element={<Cart />} />
         </Routes>
       </div>
 

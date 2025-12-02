@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ShoppingCart, Heart, User, Search, Filter } from 'lucide-react'
-import { useSelector } from "react-redux";
+import { ShoppingCart, Heart, User, Search, Filter, ShoppingBasket, PlusSquare, MinusSquare, Beer } from 'lucide-react'
+import { useDispatch, useSelector } from "react-redux";
+import { increaseQty,decreaseQty,removeFromCart } from '../features/cartSlice';
 
 export default function Header() {
+
+  const dispatch = useDispatch()
   const [cart, setCart] = useState(false);
   const [like, setLike] = useState(false);
-
+ 
   // 👉 Get cart items from Redux
   const { cartItems } = useSelector((state) => state.cart);
 
@@ -30,8 +33,12 @@ export default function Header() {
           <button className="ml-2"><Filter /></button>
         </div>
 
+
+
         {/* Desktop Icons */}
         <div className="hidden md:flex items-center gap-10 text-xl">
+
+
 
           {/* Cart Button WITH COUNT */}
           <button onClick={() => setCart(true)} className="relative">
@@ -45,7 +52,7 @@ export default function Header() {
             )}
           </button>
 
-          {/* BACKDROP */}
+          {/* Background blur */}
           {cart && (
             <div
               className="fixed inset-0 backdrop-blur-sm"
@@ -53,12 +60,13 @@ export default function Header() {
             ></div>
           )}
 
+
+{/*  --------------------------C A R T------------------------------------------------------------------------- */}
+
           {/* ⭐ Sliding Cart Panel */}
           <div
-            className={`fixed top-0 right-0 h-full w-1/2 bg-white shadow-xl p-6 overflow-y-auto transition-transform duration-300 ${
-              cart ? "translate-x-0" : "translate-x-full"
-            }`}
-          >
+            className={`fixed top-0 right-0 h-full w-1/2 bg-white shadow-xl p-6 overflow-y-auto transition-transform duration-300 ${cart ? "translate-x-0" : "translate-x-full"
+              }`} >
             <h2 className="text-xl font-bold mb-4">CART</h2>
 
             {/* If cart is empty */}
@@ -68,14 +76,12 @@ export default function Header() {
 
             {/* SHOW CART ITEMS */}
             {cartItems.map((item) => (
-              <div
-                key={item.id}
-                className="flex items-center gap-4 border-b py-4"
-              >
+              <div key={item.id} className="flex items-center gap-4 border-b py-4 px-4">
+
                 {/* Image */}
                 <img
                   src={item.image}
-                  className="w-16 h-16 object-contain"
+                  className="w-20 h-20 object-contain"
                   alt={item.title}
                 />
 
@@ -83,19 +89,25 @@ export default function Header() {
                 <div className="flex-1">
                   <h3 className="font-semibold">{item.title}</h3>
                   <p className="text-gray-600">₹{item.price}</p>
-                  <p className="text-sm text-gray-500">Qty: {item.qty}</p>
+                  <p className="text-sm text-gray-500">Qty: {item.qty} </p>
+                  <div className='gap'>
+                      <button  onClick={()=>dispatch(increaseQty(item.id))}><PlusSquare/></button>
+                      <button className=' w-5 ml-2' onClick={()=>dispatch(decreaseQty(item.id))}><MinusSquare/></button>
+                      <button className='ml-5' onClick={()=> dispatch(removeFromCart(item.id))}><Beer fill='red'/></button>
+                  </div>
+                   
                 </div>
               </div>
             ))}
 
             {/* Close Button */}
-            <button
-              onClick={() => setCart(false)}
-              className="mt-6 px-4 py-2 bg-red-500 text-white rounded"
-            >
-              Close
-            </button>
+            <button onClick={() => setCart(false)}
+              className="mt-6 px-4 py-2 bg-red-500 text-white rounded">Close</button>
           </div>
+
+
+{/* ----------------------------------------------------------------------------------------- */}
+
 
           {/* Like Button */}
           <button onClick={() => setLike(true)}>
@@ -106,21 +118,18 @@ export default function Header() {
           {like && (
             <div
               className="fixed inset-0 backdrop-blur-sm"
-              onClick={() => setLike(false)}
-            ></div>
+              onClick={() => setLike(false)}></div>
           )}
 
           {/* Sliding Like Panel */}
           <div
-            className={`fixed top-0 right-0 h-full w-1/2 bg-white shadow-xl p-6 transition-transform duration-300 ${
-              like ? "translate-x-0" : "translate-x-full"
-            }`}
-          >
+            className={`fixed top-0 right-0 h-full w-1/2 bg-white shadow-xl p-6 transition-transform duration-300 
+              ${like ? "translate-x-0" : "translate-x-full"}`}>
+
             <h2 className="text-xl font-bold mb-4">Likes</h2>
             <button
               onClick={() => setLike(false)}
-              className="px-4 py-2 bg-red-500 text-white rounded"
-            >
+              className="px-4 py-2 bg-red-500 text-white rounded">
               Close
             </button>
           </div>
@@ -132,3 +141,4 @@ export default function Header() {
     </div>
   );
 }
+           
