@@ -61,7 +61,7 @@ export default function Home() {
         >
 
           {/* ❤️ LIKE BUTTON */}
-          <button className="absolute top-3 right-3" onClick={(e) => handleLike(item, e)}>
+          <button className="absolute top-3 right-3" onClick={(e) => {handleLike(item, e);toast.success("aded to favorite ❤️")}}>
             {likeItems.some(p=> p.id === item.id) ? (<Heart fill="red" />) : (<Heart />)}
           </button>
 
@@ -87,7 +87,7 @@ export default function Home() {
             </p>
 
             {/* 🛒 CART BUTTON */}
-            <button onClick={(e) => handleCart(item, e)}>
+            <button onClick={(e) => {handleCart(item, e);toast.success("added to cart 🛒")}}>
               {cartItems.some(p => p.id === item.id) ? (<ShoppingCart fill="red" />) : (<ShoppingCart />)}
             </button>
           </div>

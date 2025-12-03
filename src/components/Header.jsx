@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import logo from "../assets/logo.png";
 import { Link, useNavigate } from 'react-router-dom'
 import { ShoppingCart, Heart, User, Search, Filter, PlusSquare, MinusSquare, Beer } from 'lucide-react'
 import { useDispatch, useSelector } from "react-redux";
@@ -11,6 +12,7 @@ export default function Header() {
   const [cart, setCart] = useState(false);
   const [like, setLike] = useState(false);
   const Navigate = useNavigate()
+  const [total, setTotl] = useState()
 
   // 👉 Get cart items from Redux
   const { cartItems } = useSelector((state) => state.cart);
@@ -23,7 +25,7 @@ export default function Header() {
 
         {/* Logo */}
         <button className="flex items-center" onClick={() => Navigate('/')}>
-          <img className="w-12" src="logo.png" alt="logo" />
+          <img className="w-12" src={logo} alt="logo" />
         </button>
 
         {/* Desktop Search Bar */}
@@ -56,6 +58,7 @@ export default function Header() {
                 {cartItems.length}
               </span>
             )}
+            
           </button>
 
           {/* Background blur */}
@@ -115,6 +118,11 @@ export default function Header() {
           {/* Like Button */}
           <button onClick={() => setLike(true)}>
             <Heart />
+            {likeItems.length > 0 &&(
+              <span className='bg-red-500 rounded-full text-white text-xs px-2 py-0.5 absolute top-4'>
+                {likeItems.length}
+              </span>
+            )}
           </button>
 
           {/* Like BG blurr */}
@@ -126,7 +134,7 @@ export default function Header() {
 
                       {/* Sliding Like Panel */}
             <div
-              className={`fixed top-0 right-0 h-full w-1/2 bg-white shadow-xl p-6 transition-transform duration-300 
+              className={`fixed top-0 right-0 h-full w-1/2 bg-white overflow-y-auto shadow-xl p-6 transition-transform duration-300 
               ${like ? "translate-x-0" : "translate-x-full"}`}>
 
               {likeItems.length === 0 && (
@@ -145,11 +153,12 @@ export default function Header() {
 
                   <div className="flex-1">
                     <h3 className="font-semibold">{item.title}</h3>
-                    <p className="text-gray-600">₹{item.price}</p>
+                    <p className="text-gray-600 ">₹{item.price}</p>
+                    <button className='bg-black text-white text-base flex rounded-lg w-28 justify-center'>add to cart</button>
 
                     {/* remove like button */}
                     <button
-                      className="text-red-500 underline mt-2"
+                      className="text-red-500 underline mt-2 text-sm"
                       onClick={() => dispatch(removeFromLike(item.id))}
                     >
                       Remove
@@ -161,9 +170,7 @@ export default function Header() {
               {/* Close Like */}
               <button
                 onClick={() => setLike(false)}
-                className="mt-6 px-4 py-2 bg-red-500 text-white rounded"
-              >
-                Close
+                className="mt-6 px-4 py-2 bg-red-500 text-white rounded">Close
               </button>
             </div>
 

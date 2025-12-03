@@ -1,7 +1,8 @@
-import { Navigate, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
 import axios from "axios"
+import { addToCart } from "../features/cartSlice"
+import { useDispatch } from "react-redux"
 
 
 export default function SingleProduct() {
@@ -9,6 +10,7 @@ export default function SingleProduct() {
    const { id } = useParams()
    const [loading,setLoading]=useState(true)
    const [product ,setProduct] =useState ([])
+   const dispatch = useDispatch()
    
 
 
@@ -24,6 +26,9 @@ export default function SingleProduct() {
   if (loading)return <div>loading..</div>
   if(!product)return <div>No product found</div>
 
+  const handleCart = (item)=>{
+    dispatch(addToCart(item))
+  }
 
   return (
     <div className="p-10 max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
@@ -35,7 +40,7 @@ export default function SingleProduct() {
         <p className="text-gray-500 mt-3">{product.category}</p>
         <p className="text-3xl mt-4 font-bold text-yellow-500">₹{product.price}</p>
         <p className="mt-4 text-gray-700 leading-7">{product.description}</p>
-        <button className="mt-6 bg-black text-white px-6 py-3 rounded-lg"> Add to Cart</button>
+        <button className="mt-6 bg-black text-white px-6 py-3 rounded-lg" onClick={()=> handleCart(product)}> Add to Cart</button>
       </div>
 
     </div>
