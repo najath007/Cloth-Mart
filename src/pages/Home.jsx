@@ -35,8 +35,10 @@ export default function Home() {
     
     if (isLiked) {
       dispatch(removeFromLike(item.id));
+      toast.error("removed from favorite")
     } else {
       dispatch(addToLike(item));
+      toast.success("added to favoite")
     }
   };
   // ---------------------------------------------------------------
@@ -61,8 +63,8 @@ export default function Home() {
         >
 
           {/* ❤️ LIKE BUTTON */}
-          <button className="absolute top-3 right-3" onClick={(e) => {handleLike(item, e);toast.success("aded to favorite ❤️")}}>
-            {likeItems.some(p=> p.id === item.id) ? (<Heart fill="red" />) : (<Heart />)}
+          <button className="absolute top-3 right-3" onClick={(e) => handleLike(item, e)}>
+            {likeItems.some(p=> p.id === item.id) ? (<Heart fill="red" />) : (<Heart /> )}
           </button>
 
           {/*  PRODUCT CLICK AREA */}

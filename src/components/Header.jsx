@@ -17,6 +17,7 @@ export default function Header() {
   // 👉 Get cart items from Redux
   const { cartItems } = useSelector((state) => state.cart);
   const { likeItems } = useSelector((state) => state.like)
+  const totalQty = cartItems.reduce((add, item) => add + item.qty, 0)
 
 
   return (
@@ -55,7 +56,7 @@ export default function Header() {
             {/* 🔥 Cart count badge */}
             {cartItems.length > 0 && (
               <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
-                {cartItems.length}
+                {totalQty}
               </span>
             )}
             
