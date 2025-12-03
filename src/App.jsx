@@ -1,12 +1,12 @@
 import './App.css'
 import Header from './components/Header'
 import Home from './pages/Home'
-import Favorite from './pages/Favorite'
 import Login from './pages/Login'
 import SingleProduct from './components/SingleProduct'
 import { Route,Routes } from 'react-router-dom'
-import { ToastContainer } from 'react-toastify'
-import "react-toastify/dist/ReactToastify.css";
+import { Toaster } from 'react-hot-toast'
+
+
 
 
 
@@ -14,12 +14,10 @@ function App() {
   return (
     <div>
         <Header />
-        <ToastContainer 
-        position='top-center'/>
+        <Toaster />
       <div className='mt-16'>
         <Routes>
             <Route path='/' element={<Home />}/>
-            <Route path='/favorite' element={<Favorite />}/>
             <Route path='/login' element={<Login/>}/>
             <Route path='/product/:id'element={<SingleProduct />}/>
         </Routes>

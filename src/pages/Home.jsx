@@ -1,46 +1,45 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// import { fetchProducts } from "../features/productSlice";
 import { addToCart } from "../features/cartSlice";
 import { Heart, ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import api from "../api/axiosInstance";
+import toast from "react-hot-toast";
+import { addToLike, removeFromLike } from "../features/likeSlice";
 
 export default function Home() {
   const dispatch = useDispatch();
-  // const { items, status } = useSelector((state) => state.products);
   const { cartItems } = useSelector((state) => state.cart)
+  const { likeItems } = useSelector((state) => state.like)
   const [products, setProducts] = useState([])
 
-   
-  
-  useEffect(()=>{
+
+  useEffect(() => {
     axios
-      .get(api)
-      .then(res=>setProducts(res.json))
-      .catch(err=>console.log(err))
-  })
-
-  // useEffect(() => {
-  //   dispatch(fetchProducts());
-  // }, [dispatch]);
+      .get("https://fakestoreapi.com/products")
+      .then(res => setProducts(res.data))
+      .catch(err => console.log(err))
+      .finally(()=>toast.success("fetch complete"))
+  }, [])
 
 
- //----------------- ❤️ Like handle ---------------------
-  const [like, setLike] = useState([]);
+
+  //----------------- ❤️ Like handle ---------------------
   
-  const handleLike = (id, e) => {
+
+  const handleLike = (item, e) => {
     e.stopPropagation();
     e.preventDefault();
 
-    if (like.includes(id)) {
-      setLike(like.filter((item) => item !== id));
+    const isLiked = likeItems.some(p=>p.id === item.id)
+    
+    if (isLiked) {
+      dispatch(removeFromLike(item.id));
     } else {
-      setLike([...like, id]);
+      dispatch(addToLike(item));
     }
   };
-// ---------------------------------------------------------------
+  // ---------------------------------------------------------------
 
 
   // 🛒 Add to Cart Redux handler
@@ -50,18 +49,11 @@ export default function Home() {
     dispatch(addToCart(item));
   };
 
-  if (status === "loading") {
-    return <div className="p-10 text-xl font-bold">Loading product...</div>;
-  }
-
-  if (status === "failed") {
-    return <div className="p-10 text-red-500">Failed to load products</div>;
-  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 p-10">
 
-      {items.map((item) => (
+      {products.map((item) => (
         <div
           key={item.id}
           className="shadow p-4 rounded-md relative hover:shadow-md transition"
@@ -69,8 +61,8 @@ export default function Home() {
         >
 
           {/* ❤️ LIKE BUTTON */}
-          <button className="absolute top-3 right-3" onClick={(e) => handleLike(item.id, e)}>{
-            like.includes(item.id) ? (<Heart fill="red" />) : (<Heart />)}
+          <button className="absolute top-3 right-3" onClick={(e) => handleLike(item, e)}>
+            {likeItems.some(p=> p.id === item.id) ? (<Heart fill="red" />) : (<Heart />)}
           </button>
 
           {/*  PRODUCT CLICK AREA */}
@@ -80,7 +72,7 @@ export default function Home() {
             <img src={item.image} alt="" className="h-40 mx-auto" />
 
             {/* TITLE */}
-            <h2 className="text-lg font-semibold mt-3 truncate"title={item.title}>{item.title}</h2>
+            <h2 className="text-lg font-semibold mt-3 truncate" title={item.title}>{item.title}</h2>
 
             {/* CATEGORY */}
             <p className="text-gray-600 text-sm mt-2">
@@ -96,8 +88,8 @@ export default function Home() {
 
             {/* 🛒 CART BUTTON */}
             <button onClick={(e) => handleCart(item, e)}>
-               {cartItems.some(p=> p.id === item.id ) ? (<ShoppingCart fill="red"/>) : (<ShoppingCart/>)}
-               </button>
+              {cartItems.some(p => p.id === item.id) ? (<ShoppingCart fill="red" />) : (<ShoppingCart />)}
+            </button>
           </div>
         </div>
       ))}

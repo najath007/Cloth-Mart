@@ -12,9 +12,7 @@ const cartSlice = createSlice({
 
       if (!exist) {
         state.cartItems.push({ ...item, qty: 1 });
-      } else {
-        exist.qty += 1;
-      }
+      } 
     },
 
     removeFromCart: (state, action) => {

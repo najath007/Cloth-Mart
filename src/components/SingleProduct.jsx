@@ -1,23 +1,29 @@
-import { useDispatch, useSelector } from "react-redux"
-import { useParams } from "react-router-dom"
-import { useEffect } from "react"
-// import { fetchProducts } from "../features/productSlice"
+import { Navigate, useParams } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import axios from "axios"
+
 
 export default function SingleProduct() {
 
    const { id } = useParams()
-   const dispatch = useDispatch()
-   const {items, status} = useSelector((state)=>state.products)
-
-   useEffect(() => {
-    if (items.length === 0) dispatch(fetchProducts());
-  }, []);
+   const [loading,setLoading]=useState(true)
+   const [product ,setProduct] =useState ([])
    
-   const product = items.find((p)=>p.id === Number(id))
 
-   if(status === "loading" || !product  ){
-    return <div>loading products...</div>
-  }
+
+  useEffect(()=>{
+    axios
+    .get(`https://fakestoreapi.com/products/${id}`)
+    .then(res =>setProduct(res.data))
+    .catch(err=> console.log(err))
+    .finally(()=>setLoading(false))
+  },[id])
+
+   
+  if (loading)return <div>loading..</div>
+  if(!product)return <div>No product found</div>
+
 
   return (
     <div className="p-10 max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
