@@ -7,21 +7,14 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { addToLike, removeFromLike } from "../features/likeSlice";
 
-export default function Home() {
+export default function Home({products , searchBar}) {
   const dispatch = useDispatch();
   const { cartItems } = useSelector((state) => state.cart)
   const { likeItems } = useSelector((state) => state.like)
-  const [products, setProducts] = useState([])
 
 
-  useEffect(() => {
-    axios
-      .get("https://fakestoreapi.com/products")
-      .then(res => setProducts(res.data))
-      .catch(err => console.log(err))
-      .finally(()=>toast.success("fetch complete"))
-  }, [])
-
+const filterProducts = products.filter((item)=>
+item.title.toLowerCase().includes(searchBar.toLowerCase()))
 
 
   //----------------- ❤️ Like handle ---------------------
@@ -38,7 +31,7 @@ export default function Home() {
       toast.error("removed from favorite")
     } else {
       dispatch(addToLike(item));
-      toast.success("added to favoite")
+      toast.success("added to favoite ❤️")
     }
   };
   // ---------------------------------------------------------------
@@ -46,16 +39,16 @@ export default function Home() {
 
   // 🛒 Add to Cart Redux handler
   const handleCart = (item, e) => {
-    e.preventDefault();
-    e.stopPropagation();
     dispatch(addToCart(item));
   };
+
+
 
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 p-10">
 
-      {products.map((item) => (
+      {filterProducts.map((item) => (
         <div
           key={item.id}
           className="shadow p-4 rounded-md relative hover:shadow-md transition"
