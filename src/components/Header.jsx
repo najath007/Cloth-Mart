@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import logo from "../assets/logo.png";
-import { Link, useNavigate } from 'react-router-dom'
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom'
 import { ShoppingCart, Heart, User, Search, Filter, PlusSquare, MinusSquare, Beer } from 'lucide-react'
 import { useDispatch, useSelector } from "react-redux";
 import { increaseQty, decreaseQty, removeFromCart } from '../features/cartSlice';
 import { removeFromLike } from '../features/likeSlice';
-import toast from 'react-hot-toast';
+
 
 export default function Header({ searchBar, setSearchBar }) {
 
@@ -13,7 +14,8 @@ export default function Header({ searchBar, setSearchBar }) {
   const dispatch = useDispatch()
   const [cart, setCart] = useState(false);
   const [like, setLike] = useState(false);
-  const [login ,setLogin] = useState(false)
+  const [dropDown, setDropDown] = useState(false)
+ 
 
 
 
@@ -22,6 +24,7 @@ export default function Header({ searchBar, setSearchBar }) {
   const { likeItems } = useSelector((state) => state.like)
   const totalQty = cartItems.reduce((add, item) => add + item.qty, 0)  //to show cart count
   const subTotal = cartItems.reduce((add, item) => add + item.price * item.qty, 0) // total amount
+   
 
 
 
@@ -46,7 +49,10 @@ export default function Header({ searchBar, setSearchBar }) {
 
 
           <button className="ml-2 px-3 py-1 border rounded"><Search /></button>
-          <button className="ml-2" ><Filter /></button>
+          <button className='ml-2' onClick={()=>setDropDown(!dropDown)}><Filter /></button>
+          {dropDown && (
+            <button>{categor}</button>
+          )}
         </div>
 
 
@@ -81,7 +87,7 @@ export default function Header({ searchBar, setSearchBar }) {
 
           {/* Sliding Cart Panel */}
           <div
-            className={`fixed top-0 right-0 h-full w-1/2 bg-white shadow-xl p-6 overflow-y-auto transition-transform duration-300 ${cart ? "translate-x-0" : "translate-x-full"
+            className={`fixed z-50 top-0 right-0 h-full w-1/2 bg-white shadow-xl p-6 overflow-y-auto transition-transform duration-300 ${cart ? "translate-x-0" : "translate-x-full"
               }`} >
             <h2 className="text-xl font-bold mb-4">CART</h2>
 
@@ -103,11 +109,12 @@ export default function Header({ searchBar, setSearchBar }) {
                 {/* Title + Price */}
                 <div className="flex-1">
                   <h3 className="font-semibold">{item.title}</h3>
-                  <p className="text-gray-600">₹{item.price}</p>
+                  <p className="text-gray-600">₹{item.price}<div className=''></div></p>
                   <p className="text-sm text-gray-500">Qty: {item.qty} </p>
+                  <p>₹{item.price * item.qty}</p>
                   <div className='gap'>
-                    <button onClick={() => dispatch(increaseQty(item.id))}><PlusSquare /></button>
-                    <button className=' w-5 ml-2' onClick={() => dispatch(decreaseQty(item.id))}><MinusSquare /></button>
+                    <button onClick={() => dispatch(increaseQty(item.id))}><PlusSquare className='hover:fill-green-500'/></button>
+                    <button className=' w-5 ml-2' onClick={() => dispatch(decreaseQty(item.id))}><MinusSquare className='hover:fill-red-500'/></button>
                     <button className='ml-5' onClick={() => { dispatch(removeFromCart(item.id)); toast.error("item removed from cart") }}><Beer fill='red' /></button>
                   </div>
 
@@ -117,6 +124,7 @@ export default function Header({ searchBar, setSearchBar }) {
             <div className='text-lg'>
               Total Amount = ₹{subTotal.toFixed(2)}
             </div>
+           
 
             {/* Close Button */}
             <button onClick={() => setCart(false)}
@@ -198,18 +206,7 @@ export default function Header({ searchBar, setSearchBar }) {
           <button className="flex items-center gap-2 hover:text-blue-500">
             <User  />
             <span>Login</span>
-            </button> 
-
-            {like && (
-            <div
-              className="fixed inset-0 backdrop-blur-sm"
-              onClick={() => setLogin(false)}></div>
-          )}
-              <div
-            className={`fixed top-0 right-0 h-full w-1/2 bg-white overflow-y-auto shadow-xl p-6 transition-transform duration-300 
-              ${login ? "translate-x-0" : "translate-x-full"}`}></div>
-
-            
+            </button>             
         </div>
       </div>
     </div>

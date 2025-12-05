@@ -14,13 +14,13 @@ const cartSlice = createSlice({
         state.cartItems.push({ ...item, qty: 1 });
       } 
     },
-
+                    //state-> current value for update
     removeFromCart: (state, action) => {
       const id = action.payload;
       state.cartItems = state.cartItems.filter((p) => p.id !== id);
     },
 
-    increaseQty: (state, action) => {
+    increaseQty: (state, action) => { 
       const product = state.cartItems.find((p) => p.id === action.payload);
       if (product) product.qty += 1;
     },
@@ -29,6 +29,7 @@ const cartSlice = createSlice({
       const product = state.cartItems.find((p) => p.id === action.payload);
       if (product && product.qty > 1) product.qty -= 1;
     },
+
   },
 });
 

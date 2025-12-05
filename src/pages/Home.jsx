@@ -1,9 +1,7 @@
-import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../features/cartSlice";
 import { Heart, ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { addToLike, removeFromLike } from "../features/likeSlice";
 
@@ -51,7 +49,7 @@ item.title.toLowerCase().includes(searchBar.toLowerCase()))
       {filterProducts.map((item) => (
         <div
           key={item.id}
-          className="shadow p-4 rounded-md relative hover:shadow-md transition"
+          className="shadow p-4 rounded-md relative hover:shadow-2xl transition"
 
         >
 
